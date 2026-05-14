@@ -26,3 +26,6 @@ pnpm-debug.log*
 # local user uploads
 public/uploads/*
 !public/uploads/.gitkeep
+
+# local database/media backups
+backups/
