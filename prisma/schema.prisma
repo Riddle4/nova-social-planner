@@ -1,0 +1,212 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Platform {
+  FACEBOOK
+  INSTAGRAM
+  BOTH
+}
+
+enum PostStatus {
+  IDEA
+  AI_DRAFT
+  TO_VALIDATE
+  VALIDATED
+  READY_FOR_META
+  EXPORTED_TO_META
+  MANUALLY_SCHEDULED
+  API_SCHEDULED
+  PUBLISHED
+  PUBLICATION_ERROR
+  ARCHIVED
+}
+
+enum MediaSource {
+  UPLOAD
+  GENERATED
+  STOCK
+  EXTERNAL
+}
+
+enum CommercialPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model Company {
+  id                         String               @id @default(cuid())
+  name                       String
+  description                String?
+  website                    String?
+  brandTone                  String?
+  facebookUrl                String?
+  instagramUrl               String?
+  defaultLanguage            String               @default("fr")
+  timezone                   String               @default("Europe/Zurich")
+  metaAccessTokenEncrypted   String?
+  metaFacebookPageId         String?
+  metaInstagramBusinessId    String?
+  services                   Service[]
+  events                     Event[]
+  mediaAssets                MediaAsset[]
+  campaigns                  Campaign[]
+  posts                      Post[]
+  recommendations            NovaRecommendation[]
+  createdAt                  DateTime             @default(now())
+  updatedAt                  DateTime             @updatedAt
+}
+
+model Service {
+  id                 String             @id @default(cuid())
+  companyId          String
+  company            Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name               String
+  shortDescription   String
+  longDescription    String?
+  targetAudience     String?
+  benefits           String?
+  pricingInfo        String?
+  bookingUrl         String?
+  bookingEmail       String?
+  seasonality        String?
+  commercialPriority CommercialPriority @default(MEDIUM)
+  salesArguments     String?
+  frequentObjections String?
+  mediaAssets        MediaAsset[]
+  posts              Post[]
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+}
+
+model Event {
+  id                   String             @id @default(cuid())
+  companyId            String
+  company              Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  title                String
+  description          String?
+  startsAt             DateTime
+  endsAt               DateTime?
+  location             String?
+  targetAudience       String?
+  bookingUrl           String?
+  bookingEmail         String?
+  registrationDeadline DateTime?
+  commercialPriority   CommercialPriority @default(MEDIUM)
+  objective            String?
+  internalNotes        String?
+  mediaAssets          MediaAsset[]
+  posts                Post[]
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+}
+
+model MediaAsset {
+  id          String       @id @default(cuid())
+  companyId   String
+  company     Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  serviceId   String?
+  service     Service?     @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  eventId     String?
+  event       Event?       @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  url         String
+  filename    String
+  type        String
+  title       String?
+  description String?
+  tags        String[]     @default([])
+  source      MediaSource  @default(UPLOAD)
+  usageCount  Int          @default(0)
+  lastUsedAt  DateTime?
+  posts       Post[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Campaign {
+  id          String    @id @default(cuid())
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name        String
+  objective   String?
+  startsAt    DateTime?
+  endsAt      DateTime?
+  notes       String?
+  posts       Post[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Post {
+  id                      String            @id @default(cuid())
+  companyId               String
+  company                 Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  serviceId               String?
+  service                 Service?          @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  eventId                 String?
+  event                   Event?            @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  mediaAssetId            String?
+  mediaAsset              MediaAsset?       @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
+  campaignId              String?
+  campaign                Campaign?         @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  internalTitle           String
+  objective               String?
+  marketingAngle          String?
+  targetAudience          String?
+  platform                Platform          @default(BOTH)
+  status                  PostStatus        @default(IDEA)
+  recommendedDate         DateTime?
+  recommendedTime         String?
+  facebookText            String?
+  instagramText           String?
+  hashtags                String[]          @default([])
+  callToAction            String?
+  link                    String?
+  generatedImagePrompt    String?
+  novaScore               Int?
+  strategicJustification  String?
+  metaExportedAt          DateTime?
+  metaFacebookPostId      String?
+  metaInstagramPostId     String?
+  publicationError        String?
+  performance             PostPerformance?
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
+}
+
+model PostPerformance {
+  id          String   @id @default(cuid())
+  postId      String   @unique
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  impressions Int?
+  reach       Int?
+  likes       Int?
+  comments    Int?
+  shares      Int?
+  saves       Int?
+  clicks      Int?
+  conversions Int?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model NovaRecommendation {
+  id          String   @id @default(cuid())
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  title       String
+  category    String
+  content     Json
+  priority    Int      @default(50)
+  isArchived  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

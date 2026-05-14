@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: nova-social-planner
+    runtime: node
+    plan: starter
+    region: frankfurt
+    branch: main
+    buildCommand: npm ci && npm run db:deploy && npm run build
+    startCommand: npm run start
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: NOVA_DEFAULT_COMPANY_ID
+        value: demo-company
+      - key: NOVA_TEXT_MODEL
+        value: gpt-5
+      - key: NOVA_IMAGE_MODEL
+        value: gpt-image-1.5
+      - key: NOVA_IMAGE_FALLBACK_MODEL
+        value: gpt-image-1
