@@ -47,6 +47,8 @@ Stack prévue :
 - `SUPABASE_STORAGE_BUCKET` : `nova-media`.
 - `AUTH_SECRET` : secret long et aléatoire pour signer la session.
 - `NOVA_ACCESS_PASSWORD` : mot de passe d'accès à la plateforme.
+- `META_ACCESS_TOKEN` : token Meta avec droits de publication sur la page Facebook et le compte Instagram Business.
+- `META_GRAPH_VERSION` : `v24.0`.
 - `NOVA_DEFAULT_COMPANY_ID` : `demo-company` pour conserver la même entreprise par défaut.
 - `NOVA_TEXT_MODEL` : `gpt-5`.
 - `NOVA_IMAGE_MODEL` : `gpt-image-1.5`.

@@ -3,6 +3,7 @@ import { addDays, addMonths, endOfMonth, format, getDay, startOfMonth } from "da
 import { fr } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getDefaultCompany } from "@/app/actions";
+import { ScheduleMonthButton } from "@/components/meta/schedule-month-button";
 import { StatusBadge } from "@/components/status-badge";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -53,7 +54,9 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
       <div className="flex flex-wrap gap-3 text-xs text-slate-300">
         <span className="rounded-full bg-slate-900 px-3 py-1">Post avec image</span>
         <span className="rounded-full border border-amber-400/40 bg-amber-400/15 px-3 py-1 text-amber-100">Image à ajouter ou générer</span>
+        <span className="rounded-full border border-teal-400/40 bg-teal-400/15 px-3 py-1 text-teal-100">Programmation Meta: VALIDATED, READY_FOR_META ou TO_VALIDATE</span>
       </div>
+      <ScheduleMonthButton month={selectedMonth} />
       <div className="grid grid-cols-7 gap-2 text-center text-xs font-medium uppercase text-slate-500">
         {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((day) => <div key={day}>{day}</div>)}
       </div>
