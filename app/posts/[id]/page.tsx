@@ -35,6 +35,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   const facebook = post.facebookText || "";
   const instagram = post.instagramText || "";
   const metaText = post.platform === "INSTAGRAM" ? instagram : facebook || instagram;
+  const calendarUrl = calendarHref(post.recommendedDate);
 
   return (
     <div className="space-y-6">
@@ -90,8 +91,8 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
             <div className="flex flex-wrap gap-3">
               <CopyButton text={facebook} label="Copier Facebook" />
               <CopyButton text={instagram} label="Copier Instagram" />
-              <StatusButton postId={post.id} status="MANUALLY_SCHEDULED" label="Marquer comme programmé" />
-              <StatusButton postId={post.id} status="PUBLISHED" label="Marquer comme publié" />
+              <StatusButton postId={post.id} status="MANUALLY_SCHEDULED" label="Marquer comme programmé" redirectTo={calendarUrl} />
+              <StatusButton postId={post.id} status="PUBLISHED" label="Marquer comme publié" redirectTo={calendarUrl} />
             </div>
             <PrepareMetaPanel postId={post.id} text={metaText} mediaUrl={post.mediaAsset?.url} />
           </CardContent>

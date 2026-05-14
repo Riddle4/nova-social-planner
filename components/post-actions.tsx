@@ -97,7 +97,7 @@ export function PrepareMetaPanel({
   );
 }
 
-export function StatusButton({ postId, status, label }: { postId: string; status: string; label: string }) {
+export function StatusButton({ postId, status, label, redirectTo }: { postId: string; status: string; label: string; redirectTo?: string }) {
   return (
     <Button
       type="button"
@@ -108,7 +108,11 @@ export function StatusButton({ postId, status, label }: { postId: string; status
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ status })
         });
-        window.location.reload();
+        if (redirectTo) {
+          window.location.href = redirectTo;
+        } else {
+          window.location.reload();
+        }
       }}
     >
       {label}
