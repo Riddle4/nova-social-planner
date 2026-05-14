@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CalendarDays, Images, LayoutDashboard, ListChecks, Wand2, Briefcase, PartyPopper } from "lucide-react";
+import { CalendarDays, Images, LayoutDashboard, ListChecks, LogOut, Wand2, Briefcase, PartyPopper } from "lucide-react";
+import { logout } from "@/app/login/actions";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -47,6 +48,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 </Link>
               ))}
             </nav>
+            <form action={logout} className="mt-6">
+              <button className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm text-slate-400 transition hover:bg-slate-900 hover:text-white">
+                <LogOut className="h-4 w-4" />
+                Déconnexion
+              </button>
+            </form>
             <div className="mt-8 rounded-lg border border-violet-400/20 bg-violet-400/10 p-4 text-sm text-slate-200">
               <p className="font-medium text-violet-100">Meta API ready</p>
               <p className="mt-2 text-slate-400">
