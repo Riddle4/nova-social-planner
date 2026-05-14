@@ -1,13 +1,8 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
-import { mkdir, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { prisma } from "@/lib/prisma";
+import { uploadMediaBuffer } from "@/lib/storage";
 import { parseTags, toNullableString } from "@/lib/utils";
-
-function safeFilename(filename: string) {
-  return `${Date.now()}-${filename.replace(/[^a-zA-Z0-9._-]/g, "-")}`;
-}
 
 async function getPost(id: string) {
   return prisma.post.findUnique({
@@ -69,18 +64,18 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     return NextResponse.json({ error: "Image manquante." }, { status: 400 });
   }
 
-  const uploadDir = path.join(process.cwd(), "public", "uploads");
-  await mkdir(uploadDir, { recursive: true });
-  const filename = safeFilename(file.name);
-  const bytes = Buffer.from(await file.arrayBuffer());
-  await writeFile(path.join(uploadDir, filename), bytes);
+  const uploaded = await uploadMediaBuffer({
+    buffer: Buffer.from(await file.arrayBuffer()),
+    filename: file.name,
+    contentType: file.type || "application/octet-stream"
+  });
 
   const asset = await prisma.mediaAsset.create({
     data: {
       companyId: post.companyId,
       serviceId: post.serviceId,
       eventId: post.eventId,
-      url: `/uploads/${filename}`,
+      url: uploaded.url,
       filename: file.name,
       type: file.type || "application/octet-stream",
       title: toNullableString(formData.get("title")) || file.name,

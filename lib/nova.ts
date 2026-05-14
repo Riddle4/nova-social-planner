@@ -1,7 +1,7 @@
 import OpenAI from "openai";
-import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
+import { uploadMediaBuffer } from "@/lib/storage";
 
 export const NOVA_TEXT_MODEL = process.env.NOVA_TEXT_MODEL || "gpt-5";
 export const NOVA_IMAGE_MODEL = process.env.NOVA_IMAGE_MODEL || "gpt-image-1.5";
@@ -124,19 +124,21 @@ ${params.prompt}`;
     const image = response.data?.[0]?.b64_json;
     if (!image) return null;
 
-    const filename = `${Date.now()}-nova-generated.png`;
-    const uploadDir = path.join(process.cwd(), "public", "uploads", "generated");
-    await mkdir(uploadDir, { recursive: true });
     const imageBuffer = Buffer.from(image, "base64");
     const finalImageBuffer = await addCmcLogoToImage(imageBuffer);
-    await writeFile(path.join(uploadDir, filename), finalImageBuffer);
+    const uploaded = await uploadMediaBuffer({
+      buffer: finalImageBuffer,
+      filename: "nova-generated.png",
+      contentType: "image/png",
+      folder: "generated"
+    });
 
     return {
       companyId: params.companyId,
       serviceId: params.serviceId || undefined,
       eventId: params.eventId || undefined,
-      url: `/uploads/generated/${filename}`,
-      filename,
+      url: uploaded.url,
+      filename: uploaded.filename,
       type: "image/png",
       title: params.title,
       description: imagePrompt,

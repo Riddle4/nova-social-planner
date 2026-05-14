@@ -3,9 +3,8 @@
 import { CommercialPriority, Platform, PostStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { writeFile } from "node:fs/promises";
-import path from "node:path";
 import { prisma } from "@/lib/prisma";
+import { uploadMediaBuffer } from "@/lib/storage";
 import { parseTags, toNullableDate, toNullableString } from "@/lib/utils";
 
 export async function getDefaultCompany() {
@@ -259,17 +258,18 @@ export async function uploadMedia(formData: FormData) {
   const serviceId = toNullableString(formData.get("serviceId"));
   const eventId = toNullableString(formData.get("eventId"));
 
-  const bytes = Buffer.from(await file.arrayBuffer());
-  const safeName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "-")}`;
-  const uploadPath = path.join(process.cwd(), "public", "uploads", safeName);
-  await writeFile(uploadPath, bytes);
+  const uploaded = await uploadMediaBuffer({
+    buffer: Buffer.from(await file.arrayBuffer()),
+    filename: file.name,
+    contentType: file.type || "application/octet-stream"
+  });
 
   await prisma.mediaAsset.create({
     data: {
       companyId: company.id,
       serviceId,
       eventId,
-      url: `/uploads/${safeName}`,
+      url: uploaded.url,
       filename: file.name,
       type: file.type || "application/octet-stream",
       title: toNullableString(formData.get("title")),

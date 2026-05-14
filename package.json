@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:deploy": "prisma migrate deploy",
+    "storage:migrate": "tsx scripts/migrate-uploads-to-supabase.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx prisma/seed.ts"
@@ -15,6 +16,7 @@
   "dependencies": {
     "@prisma/client": "^6.8.2",
     "@radix-ui/react-slot": "^1.2.3",
+    "@supabase/supabase-js": "^2.105.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",

@@ -33,15 +33,18 @@ MVP Next.js pour Nova, l'agent IA community manager connecté à Cosmo AI.
 Stack prévue :
 
 - GitHub : `https://github.com/Riddle4/nova-social-planner.git`
-- Neon : PostgreSQL cloud
+- Supabase : PostgreSQL cloud + Storage média
 - Render : web service Node
 
 ### Variables Render
 
 À renseigner dans Render :
 
-- `DATABASE_URL` : connection string Neon, idéalement l'URL pooled avec SSL.
+- `DATABASE_URL` : connection string PostgreSQL Supabase avec SSL.
 - `OPENAI_API_KEY` : clé API OpenAI.
+- `SUPABASE_URL` : URL du projet Supabase, par exemple `https://xxxx.supabase.co`.
+- `SUPABASE_SERVICE_ROLE_KEY` : clé service role Supabase, côté serveur uniquement.
+- `SUPABASE_STORAGE_BUCKET` : `nova-media`.
 - `NOVA_DEFAULT_COMPANY_ID` : `demo-company` pour conserver la même entreprise par défaut.
 - `NOVA_TEXT_MODEL` : `gpt-5`.
 - `NOVA_IMAGE_MODEL` : `gpt-image-1.5`.
@@ -58,7 +61,14 @@ Le fichier `render.yaml` configure :
 
 ### Médias en production
 
-Les uploads locaux dans `public/uploads` ne sont pas versionnés. Sur Render, prévoir rapidement un stockage persistant :
+Les uploads locaux dans `public/uploads` ne sont pas versionnés. En production, Nova utilise Supabase Storage quand les variables `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` et `SUPABASE_STORAGE_BUCKET` sont configurées.
 
-- MVP court terme : Render Disk monté sur le dossier d'uploads.
-- Recommandé ensuite : Supabase Storage, Cloudflare R2 ou S3.
+Pour migrer les médias locaux existants vers Supabase Storage :
+
+```bash
+DATABASE_URL="postgresql://..." \
+SUPABASE_URL="https://xxxx.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="..." \
+SUPABASE_STORAGE_BUCKET="nova-media" \
+npm run storage:migrate
+```
