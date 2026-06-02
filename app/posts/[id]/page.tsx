@@ -5,6 +5,7 @@ import { deletePost, updatePost } from "@/app/actions";
 import { PostImageGenerator } from "@/components/image-generator";
 import { CopyButton, PrepareMetaPanel, StatusButton } from "@/components/post-actions";
 import { PostMediaManager } from "@/components/post-media-manager";
+import { PostRegenerator } from "@/components/post-regenerator";
 import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -61,6 +62,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
         <Card>
           <CardHeader><CardTitle>Contenu prêt à publier</CardTitle></CardHeader>
           <CardContent className="space-y-5">
+            <PostRegenerator postId={post.id} initialSubject={post.internalTitle} />
             <form action={updatePost} className="grid gap-4 rounded-md border border-slate-800 p-4">
               <input type="hidden" name="id" value={post.id} />
               <div className="grid gap-4 md:grid-cols-2">
