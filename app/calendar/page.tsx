@@ -3,6 +3,7 @@ import { addDays, addMonths, endOfMonth, format, getDay, startOfMonth } from "da
 import { fr } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getDefaultCompany } from "@/app/actions";
+import { CalendarEmptyDayCreator } from "@/components/calendar-empty-day-creator";
 import { ScheduleMonthButton } from "@/components/meta/schedule-month-button";
 import { StatusBadge } from "@/components/status-badge";
 import { Card } from "@/components/ui/card";
@@ -83,6 +84,9 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
                     <StatusBadge status={post.status} className="mt-2 inline-block scale-90" />
                   </Link>
                 ))}
+                {!dayPosts.length ? (
+                  <CalendarEmptyDayCreator date={format(day, "yyyy-MM-dd")} dayLabel={format(day, "d MMMM", { locale: fr })} />
+                ) : null}
               </div>
             </Card>
           );
