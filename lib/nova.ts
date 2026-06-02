@@ -3,7 +3,7 @@ import path from "node:path";
 import sharp from "sharp";
 import { uploadMediaBuffer } from "@/lib/storage";
 
-export const NOVA_TEXT_MODEL = process.env.NOVA_TEXT_MODEL || "gpt-5";
+export const NOVA_TEXT_MODEL = process.env.NOVA_TEXT_MODEL || "gpt-5.5";
 export const NOVA_IMAGE_MODEL = process.env.NOVA_IMAGE_MODEL || "gpt-image-1.5";
 export const NOVA_IMAGE_FALLBACK_MODEL = process.env.NOVA_IMAGE_FALLBACK_MODEL || "gpt-image-1";
 

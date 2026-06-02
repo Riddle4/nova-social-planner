@@ -32,7 +32,7 @@ services:
       - key: NOVA_DEFAULT_COMPANY_ID
         value: demo-company
       - key: NOVA_TEXT_MODEL
-        value: gpt-5
+        value: gpt-5.5
       - key: NOVA_IMAGE_MODEL
         value: gpt-image-1.5
       - key: NOVA_IMAGE_FALLBACK_MODEL

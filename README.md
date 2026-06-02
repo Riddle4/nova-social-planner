@@ -50,7 +50,7 @@ Stack prévue :
 - `META_ACCESS_TOKEN` : token Meta avec droits de publication sur la page Facebook et le compte Instagram Business.
 - `META_GRAPH_VERSION` : `v24.0`.
 - `NOVA_DEFAULT_COMPANY_ID` : `demo-company` pour conserver la même entreprise par défaut.
-- `NOVA_TEXT_MODEL` : `gpt-5`.
+- `NOVA_TEXT_MODEL` : `gpt-5.5`.
 - `NOVA_IMAGE_MODEL` : `gpt-image-1.5`.
 - `NOVA_IMAGE_FALLBACK_MODEL` : `gpt-image-1`.
 
