@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { login } from "@/app/login/actions";
 import { isAuthConfigured } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,7 +21,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           <p className="mt-2 text-sm text-slate-400">Entrez le mot de passe pour accéder à Nova Social Planner.</p>
         </CardHeader>
         <CardContent>
-          <form action={login} className="space-y-4">
+          <form action="/api/login" method="post" className="space-y-4">
             <input type="hidden" name="next" value={params.next || "/dashboard"} />
             <div className="field">
               <label>Mot de passe</label>

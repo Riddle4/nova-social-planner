@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CalendarDays, Images, LayoutDashboard, ListChecks, LogOut, Wand2, Briefcase, PartyPopper } from "lucide-react";
-import { logout } from "@/app/login/actions";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -48,7 +47,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 </Link>
               ))}
             </nav>
-            <form action={logout} className="mt-6">
+            <form action="/api/logout" method="post" className="mt-6">
               <button className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm text-slate-400 transition hover:bg-slate-900 hover:text-white">
                 <LogOut className="h-4 w-4" />
                 Déconnexion

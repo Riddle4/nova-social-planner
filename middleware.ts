@@ -6,6 +6,8 @@ const PUBLIC_PATHS = [
   "/agents",
   "/brand",
   "/uploads",
+  "/api/login",
+  "/api/logout",
   "/favicon.ico"
 ];
 
